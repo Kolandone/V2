@@ -1,25 +1,22 @@
 #!/bin/bash
 
-# Define the MTU size and name
-new_mtu="1280"
-new_name="Koland"
+# Prompt for user input
+read -p "Enter the new domain and port (e.g., example.com:1234): " new_domain_port
+read -p "Enter the new MTU size (default is 1280): " new_mtu
+read -p "Enter the new name (default is Koland): " new_name
 
-# Run the install.sh script and pipe in the option '1' when prompted
-output1=$({ echo "1"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh))
+# Set default values if no input is provided
+new_domain_port=${new_domain_port:-"engage.cloudflareclient.com:2408"}
+new_mtu=${new_mtu:-"1280"}
+new_name=${new_name:-"Koland"}
 
-# Extract the IP and port from output1 using grep and awk
-new_domain_port=$(echo "$output1" | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+' | head -n 1)
-
-# Run the install.sh script again and pipe in the options '4' and 'wire-g' when prompted
-output2=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh))
-
-# Combine outputs
-output="$output1\n$output2"
+# Run the installr.sh script and pipe in the option '4' when prompted
+output=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh))
 
 # Use sed to replace the strings in the output
-output=$(echo -e "$output" | sed -e "s/engage.cloudflareclient.com:2408/$new_domain_port/g")
-output=$(echo -e "$output" | sed -e "s/1280/$new_mtu/g")
-output=$(echo -e "$output" | sed -e "s/Koland/$new_name/g")
+output=$(echo "$output" | sed -e "s/engage.cloudflareclient.com:2408/$new_domain_port/g")
+output=$(echo "$output" | sed -e "s/1420/$new_mtu/g")
+output=$(echo "$output" | sed -e "s/Peyman_wire-g/$new_name/g")
 
 # Display the modified output
-echo -e "$output"
+echo "$output"
