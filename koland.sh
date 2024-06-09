@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "youtube:Kolandone"
+echo -e "\e[32myoutube:Kolandone\e[0m"
 
 # Prompt for user input
 read -p "Enter the new domain and port (e.g., example.com:1234): " user_input_domain_port
