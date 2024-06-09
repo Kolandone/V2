@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # Define the new domain and port, MTU size, and name
-new_domain_port="output1"
 new_mtu="1280"
 new_name="Koland"
 
