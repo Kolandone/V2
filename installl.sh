@@ -3,7 +3,7 @@
 bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh)
 
 # Automatically select option 4 (Install wire-g)
-echo "4" | bash
+4
 
 # Wait for the installation to complete
 sleep 2
