@@ -4,7 +4,7 @@
 bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh)
 
 # Execute the command '4'
-command 4
+
 
 # Run the wire-g command and modify the output
 output=$(wire-g)
