@@ -1,7 +1,3 @@
-#!/usr/bin/expect
-spawn bash -c "bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh)"
-expect "Enter your choice:"
-send "4\r"
-expect "Run -- >"
-send "wire-g\r"
-interact
+#!/bin/bash
+# Run the installr.sh script and pipe in the option '4' when prompted
+{ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh)
