@@ -6,7 +6,7 @@ new_mtu="1280"
 new_name="Koland"
 
 # Run the install.sh script and pipe in the option '1' when prompted
-output1=$({ echo "1"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh))
+output1=$({ echo "1"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh))
 
 # Run the install.sh script again and pipe in the options '4' and 'wire-g' when prompted
 output2=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh))
