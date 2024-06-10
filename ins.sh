@@ -1,6 +1,16 @@
 #!/bin/bash
 echo -e "\e[32myoutube:Kolandone\e[0m"
 
+# Function to run wire-g command
+run_wire_g() {
+    if command -v wire-g &> /dev/null; then
+        echo "Running wire-g..."
+        wire-g
+    else
+        echo "wire-g command not found."
+    fi
+}
+
 # Prompt for user input
 read -p "Enter the new domain and port (e.g., example.com:1234): " user_input_domain_port
 read -p "Enter the new MTU size (default is 1280): " new_mtu
@@ -28,8 +38,11 @@ fi
 new_mtu=${new_mtu:-"1280"}
 new_name=${new_name:-"Koland"}
 
-# Run the installr.sh script and pipe in the option '4' when prompted
-output=$({ echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/install.sh))
+# Run the install.sh script and pipe in the option '4' when prompted
+output=$(bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/install.sh))
+
+# After running install.sh, run wire-g
+run_wire_g
 
 # Use sed to replace the strings in the output
 output=$(echo "$output" | sed -e "s/engage.cloudflareclient.com:2408/$new_domain_port/g")
