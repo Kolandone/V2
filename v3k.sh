@@ -13,7 +13,7 @@ if [ "$user_choice" == "1" ]; then
     fetched_ip=$(echo "1" | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh) | grep -oP '(\d{1,3}\.){3}\d{1,3}:\d+' | head -n 1)
 elif [ "$user_choice" == "2" ]; then
     echo "Fetching IPv6 address from install.sh..."
-    fetched_ip=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?)')
+    fetched_ip=$(echo "2" | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh) | grep -oP '(\[?[a-fA-F\d:]+\]?\:\d+)' | head -n 1)
 else
     echo "Invalid choice. Exiting..."
     exit 1
@@ -34,8 +34,9 @@ new_name=${new_name:-"Koland"}
 # Run the installr.sh script and pipe in the option '4' when prompted
 output=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh))
 
-# Use sed to replace the strings in the output
-output=$(echo "$output" | sed -e "s|engage.cloudflareclient.com:2408|$new_domain_port|g")
+# Use sed to replace the strings in the output, properly escaping the new domain and port
+escaped_domain_port=$(printf '%s\n' "$new_domain_port" | sed 's/[]\/$*.^|[]/\\&/g')
+output=$(echo "$output" | sed -e "s|engage.cloudflareclient.com:2408|$escaped_domain_port|g")
 output=$(echo "$output" | sed -e "s|1420|$new_mtu|g")
 output=$(echo "$output" | sed -e "s|Peyman_wire-g|$new_name|g")
 
