@@ -35,9 +35,9 @@ new_name=${new_name:-"Koland"}
 output=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh))
 
 # Use sed to replace the strings in the output
-output=$(echo "$output" | sed -e "s/engage.cloudflareclient.com:2408/$new_domain_port/g")
-output=$(echo "$output" | sed -e "s/1420/$new_mtu/g")
-output=$(echo "$output" | sed -e "s/Peyman_wire-g/$new_name/g")
+output=$(echo "$output" | sed -e "s|engage.cloudflareclient.com:2408|$new_domain_port|g")
+output=$(echo "$output" | sed -e "s|1420|$new_mtu|g")
+output=$(echo "$output" | sed -e "s|Peyman_wire-g|$new_name|g")
 
 # Display the modified output
 echo "$output"
