@@ -36,17 +36,17 @@ output=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubuser
 
 # Check if the previous command was successful
 if [ $? -eq 0 ]; then
-    # Use sed to replace the strings in the output, properly escaping the new domain and port
+    # Run the wire-g command and capture its output
+    wireg_output=$(wire-g)
+
+    # Use sed to replace the strings in the wire-g output, properly escaping the new domain and port
     escaped_domain_port=$(printf '%s\n' "$new_domain_port" | sed 's/[]\/$*.^|[]/\\&/g')
-    output=$(echo "$output" | sed -e "s|engage.cloudflareclient.com:2408|$escaped_domain_port|g")
-    output=$(echo "$output" | sed -e "s|1420|$new_mtu|g")
-    output=$(echo "$output" | sed -e "s|Peyman_wire-g|$new_name|g")
+    wireg_output=$(echo "$wireg_output" | sed -e "s|engage.cloudflareclient.com:2408|$escaped_domain_port|g")
+    wireg_output=$(echo "$wireg_output" | sed -e "s|1420|$new_mtu|g")
+    wireg_output=$(echo "$wireg_output" | sed -e "s|Peyman_wire-g|$new_name|g")
 
-    # Display the modified output
-    echo "$output"
-
-    # Run the wire-g command
-    wire-g
+    # Display the modified wire-g output
+    echo "$wireg_output"
 else
     echo "The initial command failed."
 fi
