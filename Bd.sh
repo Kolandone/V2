@@ -34,6 +34,14 @@ new_name=${new_name:-"Koland"}
 # Run the installr.sh script and pipe in the option '4' when prompted
 output=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh))
 
+# Check if the previous command was successful
+if [ $? -eq 0 ]; then
+    # Run the wire-g command
+    wire-g
+else
+    echo "The initial command failed."
+fi
+
 # Use sed to replace the strings in the output, properly escaping the new domain and port
 escaped_domain_port=$(printf '%s\n' "$new_domain_port" | sed 's/[]\/$*.^|[]/\\&/g')
 output=$(echo "$output" | sed -e "s|engage.cloudflareclient.com:2408|$escaped_domain_port|g")
