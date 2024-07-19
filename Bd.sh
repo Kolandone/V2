@@ -32,7 +32,7 @@ new_mtu=${new_mtu:-"1280"}
 new_name=${new_name:-"Koland"}
 
 # Run the installr.sh script and pipe in the option '4' when prompted
-output=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Kolandone/V2/main/installr.sh))
+output=$({ echo "4"; echo "wire-g"; } | bash <(curl -fsSL https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/install.sh))
 
 # Use sed to replace the strings in the output, properly escaping the new domain and port
 escaped_domain_port=$(printf '%s\n' "$new_domain_port" | sed 's/[]\/$*.^|[]/\\&/g')
