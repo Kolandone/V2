@@ -132,9 +132,62 @@ echo "Endpoint = $endpoint"
 echo -e "\n${GREEN}=== V2Ray JSON Config ===${RESET}"
 cat << EOF
 {
+  "dns": {
+    "hosts": {
+      "geosite:category-porn": "127.0.0.1",
+      "domain:googleapis.cn": "googleapis.com"
+    },
+    "servers": [
+      "1.1.1.1"
+    ]
+  },
+  "fakedns": [
+    {
+      "ipPool": "198.18.0.0/15",
+      "poolSize": 10000
+    }
+  ],
+  "inbounds": [
+    {
+      "listen": "127.0.0.1",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "userLevel": 8
+      },
+      "sniffing": {
+        "destOverride": [
+          "http",
+          "tls",
+          "fakedns"
+        ],
+        "enabled": true
+      },
+      "tag": "socks"
+    },
+    {
+      "listen": "127.0.0.1",
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "userLevel": 8
+      },
+      "tag": "http"
+    }
+  ],
+  "log": {
+    "loglevel": "warning"
+  },
   "outbounds": [
     {
-      "tag": "WARP",
+      "mux": {
+        "concurrency": -1,
+        "enabled": false,
+        "xudpConcurrency": 8,
+        "xudpProxyUDP443": ""
+      },
       "protocol": "wireguard",
       "settings": {
         "secretKey": "$private_key",
@@ -145,18 +198,83 @@ cat << EOF
         "peers": [
           {
             "publicKey": "$public_key",
-            "allowedIPs": [
-              "0.0.0.0/0",
-              "::/0"
-            ],
-            "endpoint": "$endpoint"
+            "endpoint": "$endpoint",
+            "keepAlive": 5
           }
         ],
+        "reserved": [$reserved],
         "mtu": $new_mtu,
-        "reserved": [$reserved]
-      }
+        "wnoise": "quic",
+        "wnoisecount": "15",
+        "wnoisedelay": "1-2",
+        "wpayloadsize": "5-10"
+      },
+      "tag": "proxy"
+    },
+    {
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIP"
+      },
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "settings": {
+        "response": {
+          "type": "http"
+        }
+      },
+      "tag": "block"
     }
-  ]
+  ],
+  "remarks": "KOLANDONE",
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "rules": [
+      {
+        "ip": [
+          "1.1.1.1"
+        ],
+        "outboundTag": "proxy",
+        "port": "53",
+        "type": "field"
+      },
+      {
+        "domain": [
+          "domain:ir",
+          "geosite:category-ir",
+          "geosite:private"
+        ],
+        "outboundTag": "direct",
+        "type": "field"
+      },
+      {
+        "ip": [
+          "geoip:ir",
+          "geoip:private"
+        ],
+        "outboundTag": "direct",
+        "type": "field"
+      },
+      {
+        "domain": [
+          "geosite:category-porn"
+        ],
+        "outboundTag": "block",
+        "type": "field"
+      },
+      {
+        "ip": [
+          "10.10.34.34",
+          "10.10.34.35",
+          "10.10.34.36"
+        ],
+        "outboundTag": "block",
+        "type": "field"
+      }
+    ]
+  }
 }
 EOF
 
