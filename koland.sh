@@ -228,7 +228,7 @@ cat << EOF
       "tag": "block"
     }
   ],
-  "remarks": "KOLANDONE",
+  "remarks": "KOLAND",
   "routing": {
     "domainStrategy": "IPIfNonMatch",
     "rules": [
